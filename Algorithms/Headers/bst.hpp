@@ -298,39 +298,43 @@ void bst_avl<T>::right_rotation(bst_node<T> *node)
 template <class T>
 void bst_avl<T>::balance(bst_node<T> *node)
 {
-    bst_node<T>* start = node;
-    
     while(node)
     {
         if(abs(skew(node)) > 1)
         {
-            if(skew(node) > 0)
+            if(skew(node) > 1)
             {
                 if(skew(node->right) == -1)
                 {
-                    right_rotation(node->right);
                     left_rotation(node);
                 }
                 else
                 {
+                    right_rotation(node->right);
                     left_rotation(node);
                 }
             }
             else
             {
-                if(skew(node->left) == -1)
+                if(skew(node->left) == 1)
                 {
-                    left_rotation(node->left);
                     right_rotation(node);
                 }
                 else
                 {
+                    left_rotation(node->left);
                     right_rotation(node);
                 }
+            }        
+        
+            if(this->root == node && node->parent)
+            {
+                this->root = node->parent;
             }
         }
 
         node = node->parent;
+                
     }
         
     update_height(start);
